@@ -1,0 +1,16 @@
+from habanero import Crossref
+import pandas as pd
+
+cr = Crossref()
+DOIs=[
+"10.1172/jci.insight.138999",
+]
+dataFiltered = []
+data=cr.works(ids = DOIs)
+
+for i in range(len(DOIs)):
+    dataFiltered.append ([data[i]['message']['DOI'],data[i]['message']['is-referenced-by-count'], data[i]['message']['relation']])
+
+print (dataFiltered)
+df = pd.DataFrame(dataFiltered)
+df.to_excel('./Crossref_Data.xlsx')
