@@ -1,0 +1,39 @@
+from habanero import Crossref
+import pandas as pd
+cr = Crossref()
+DOIs = [
+"10.1172/jci.insight.138999",
+]
+dataFiltered = []
+data=cr.works(ids = DOIs)
+date1 = []
+date2 = []
+date3 = []
+
+for i in range(len(DOIs)):
+    dateJson = data[i]['message']['created']['date-parts'][0]
+    for x in range(len(dateJson)):
+        if x == 0:
+            date1.append(str(data[i]['message']['created']['date-parts'][0][x]))
+        elif x == 1:
+            date2.append(str(data[i]['message']['created']['date-parts'][0][x]))
+        else:
+            date3.append(str(data[i]['message']['created']['date-parts'][0][x]))
+
+    dataFiltered.append(
+        [
+            data[i]['message']['DOI'],
+            str(date1)[1:-1],
+            str(date2),
+            str(date3)
+         ]
+    )
+    date1 = []
+    date2 = []
+    date3 = []
+
+df = pd.DataFrame(dataFiltered)
+df.to_excel('./Crossref_data_dates.xlsx')
+
+
+
